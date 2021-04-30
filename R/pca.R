@@ -1,6 +1,6 @@
-library(M3C)
-install.packages("factoextra")
-library(factoextra)
+#library(M3C)
+#install.packages("factoextra")
+#library(factoextra)
 
 merge <- read.table("merge.quality.metrics.complete.txt",header=T)
 
