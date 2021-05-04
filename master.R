@@ -3,30 +3,30 @@ source("R/readCountPlotting.R")
 source("R/collectLibraryMetrics.R")
 source("R/plottingPairs.R")
 
-
+args = commandArgs(trailingOnly=TRUE)
 
 ### Collect library metrics from BAM files ### 
 
-collectLibraryStats(folder = "Input/BAM/")
+collectLibraryStats(folder = args[1])
 
 
 ### Plot pairs
 
-plottingPairs()
+#plottingPairs()
 
 
 
 
 ### Run breakpointR and generate rdata files ###
 
-breakpointr(inputfolder="Input/BAM/", outputfolder="Output/bpr/", pairedEndReads=TRUE, numCPU=2,windowsize=175,binMethod="reads",peakTh=0.3875,min.mapq=7.75,trim=6.5,background=0.15)
+breakpointr(inputfolder=args[1], outputfolder="Output/bpr/", pairedEndReads=TRUE, numCPU=2,windowsize=175,binMethod="reads",peakTh=0.3875,min.mapq=7.75,trim=6.5,background=0.15)
 
 
 
 
 ### Run breakpointR and generate rdata files ###
 
-readPlotting(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/",cluster.metrics="merge.quality.metrics.complete.txt",features=c("coverage","background","spikiness","evenness"),numOfLibs=20)
+#readPlotting(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/",cluster.metrics="merge.quality.metrics.complete.txt",features=c("coverage","background","spikiness","evenness"),numOfLibs=20)
 
 
 
