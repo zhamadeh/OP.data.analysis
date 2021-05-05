@@ -4,7 +4,7 @@
 
 merge <- read.table("merge.quality.metrics.complete.txt",header=T)
 
-merge.pca =  prcomp(merge[,c(3:7)],center = T,scale. = T)
+merge.pca =  prcomp(merge[,c(2:6)],center = T,scale. = T)
 
 
 fviz_pca_ind(merge.pca, geom.ind = "point", pointshape = 21, 

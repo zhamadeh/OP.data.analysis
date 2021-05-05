@@ -1,19 +1,33 @@
 
 
-readPlotting <- function(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/",cluster.metrics="merge.metrics.background.txt",features=c("coverage","background","spikiness","evenness"),numOfLibs=20){
+readPlotting <- function(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/",cluster.metrics="merge.metrics.background.quality.txt",features=c("coverage","background","spikiness","evenness.mean","good"),numOfLibs=20){
     
     cluster.metrics = read.table(cluster.metrics,header=T)
     
+    
+    cluster.metrics=cluster.metrics[!grepl("na", cluster.metrics$file),]
+    cluster.metrics=cluster.metrics[!grepl("Undetermined", cluster.metrics$file),]
+
     for (feature in features){
         
         plots <- list()
         
         
         if (feature=="coverage"){
-            df = cluster.metrics[order(cluster.metrics[,feature] ,decreasing = T),][1:numOfLibs,]
-        } else {df = cluster.metrics[order(cluster.metrics[,feature] ,decreasing = F),][1:numOfLibs,]}
+            head= head(cluster.metrics[order(cluster.metrics[,feature] ,decreasing = T),],numOfLibs/2)
+            tail= tail(cluster.metrics[order(cluster.metrics[,feature] ,decreasing = T),],numOfLibs/2)
+            df = rbind(head,tail)
+
+        } else if (feature =="good"){
+            df = dplyr::filter(cluster.metrics, quality %in% c("good","very_good"))
+            
+        } else {
+            head= head(cluster.metrics[order(cluster.metrics[,feature] ,decreasing = F),],numOfLibs/2)
+            tail= tail(cluster.metrics[order(cluster.metrics[,feature] ,decreasing = F),],numOfLibs/2)
+            df = rbind(head,tail)
+        }
         
-        file=df$file[1]
+        #file=df$file[1]
         
         for (file in df$file){
             f =file

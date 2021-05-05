@@ -331,9 +331,8 @@ collectLibraryStats <- function(folder){
 		row=data.frame(file=basename(file),coverage=coverage,spikiness=spikiness,evenness.mean=evenness.mean,evenness.med=evenness.med)
 		met=rbind(met,row)
 	}
+	
 	write.table(met,"Input/all.bam.new.metrics.txt",sep="\t",quote=F,row.names = F,col.names = T)
 }
-
-
 
 

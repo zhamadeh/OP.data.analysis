@@ -9,36 +9,21 @@ args = commandArgs(trailingOnly=TRUE)
 
 collectLibraryStats(folder = args[1])
 
-
-### Plot pairs
-
-#plottingPairs()
-merge = read.table("Input/all.bam.new.metrics.txt",header=T)
-merge$background = NA
-
-for (i in 1:nrow(merge)){
-  filename = paste0("Output/bpr/data/",merge[i,1],".RData")
-  tmp = get(load(filename))$lib.metrics[1][[1]]
-  tmp2 = get(load(filename))$lib.metrics[2][[1]]
-  merge[i,]$background = tmp
-  merge[i,]$coverage = tmp2
-}
-
-
-write.table(merge,"merge.metrics.background.txt")
-
-
-
 ### Run breakpointR and generate rdata files ###
 
 breakpointr(inputfolder=args[1], outputfolder="Output/bpr/", pairedEndReads=TRUE, numCPU=2,windowsize=175,binMethod="reads",peakTh=0.3875,min.mapq=7.75,trim=6.5,background=0.15)
 
+### Quality metrics assembly
 
+qualityMetrics()
 
+### Plot pairs
+
+plottingPairs()
 
 ### Run breakpointR and generate rdata files ###
 
-readPlotting(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/",cluster.metrics="merge.metrics.background.txt",features=c("coverage","background","spikiness","evenness"),numOfLibs=20)
+readPlotting(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/",cluster.metrics="merge.metrics.background.quality.txt",features=c("coverage","background","spikiness","evenness.mean","good"),numOfLibs=10)
 
 
 
