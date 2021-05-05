@@ -1,6 +1,6 @@
 
 
-readPlotting <- function(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/",cluster.metrics="merge.quality.metrics.complete.txt",features=c("coverage","background","spikiness","evenness"),numOfLibs=20){
+readPlotting <- function(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/",cluster.metrics="merge.metrics.background.txt",features=c("coverage","background","spikiness","evenness"),numOfLibs=20){
     
     cluster.metrics = read.table(cluster.metrics,header=T)
     
@@ -13,9 +13,9 @@ readPlotting <- function(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/"
             df = cluster.metrics[order(cluster.metrics[,feature] ,decreasing = T),][1:numOfLibs,]
         } else {df = cluster.metrics[order(cluster.metrics[,feature] ,decreasing = F),][1:numOfLibs,]}
         
-        file=df$filename[1]
+        file=df$file[1]
         
-        for (file in df$filename){
+        for (file in df$file){
             f =file
             file=paste0(rdata,file,".RData")
 
@@ -30,8 +30,8 @@ readPlotting <- function(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/"
             breaks <- data$breaks
             counts <- data$counts
             lib.metrics <- data$lib.metrics
-            lib.metrics["spikiness"]= cluster.metrics[cluster.metrics$filename==f,]$spikiness
-            lib.metrics["evenness"]= cluster.metrics[cluster.metrics$filename==f,]$evenness.med
+            lib.metrics["spikiness"]= cluster.metrics[cluster.metrics$file==f,]$spikiness
+            lib.metrics["evenness"]= cluster.metrics[cluster.metrics$file==f,]$evenness.med
             lib.metrics <- round(lib.metrics, digits = 5)
             lib.metrics <- paste(names(lib.metrics), lib.metrics, sep = '=')
             lib.metrics <- paste(lib.metrics, collapse = "  |  ")

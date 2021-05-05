@@ -5,20 +5,21 @@ library("ggplot2")
 
 plottingPairs <- function(){
   #load data
-  df = read.table("Input/library.metrics.backup.txt",header=T)
-  quality <- read.csv("Input/library.quality.backup.txt",sep="\t")
-  quality$quality<-as.factor(quality$quality)
-  levels(quality$quality) = c( "acceptable" ,"good", "okay", "poor", "really_good")
+  df = read.table("Input/all.bam.new.metrics.txt",header=T)
+  #quality <- read.csv("Input/library.quality.backup.txt",sep="\t")
+  #quality$quality<-as.factor(quality$quality)
+  #levels(quality$quality) = c( "acceptable" ,"good", "okay", "poor", "really_good")
   
-  interesting.libraries = quality[quality$cool=="***",]$filename
+  #interesting.libraries = quality[quality$cool=="***",]$filename
   
   
-  qt = select(quality,c(filename,quality))
-  merge = merge(qt,df,by.x="filename",by.y="file")
+  #qt = select(quality,c(filename,quality))
+  #merge = merge(qt,df,by.x="filename",by.y="file")
+  merge=df
   merge$background = NA
   
   for (i in 1:nrow(merge)){
-  	filename = paste0("../StraVa/DATA/rdata/",merge[i,1],".RData")
+  	filename = paste0("Output/bpr/data/",merge[i,1],".RData")
   	tmp = get(load(filename))$lib.metrics[1][[1]]
   	tmp2 = get(load(filename))$lib.metrics[2][[1]]
   	merge[i,]$background = tmp
@@ -26,7 +27,7 @@ plottingPairs <- function(){
   }
   
   
-  write.table(merge,"merge.quality.metrics.complete2.txt")
+  write.table(merge,"merge.metrics.background.txt")
   
   
   my_cols=c("#b1c926", "#32a852", "#c98d26","red","#0acca5")
