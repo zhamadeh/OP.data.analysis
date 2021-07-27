@@ -1,3 +1,5 @@
+install.packages("BiocManager")
+BiocManager::install("breakpointR")
 library(breakpointR)
 source("R/readCountPlotting.R")
 source("R/collectLibraryMetrics.R")

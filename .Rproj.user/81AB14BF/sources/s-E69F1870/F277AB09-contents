@@ -1,0 +1,6 @@
+breakpoints <- read.table("../StraVa/BACKUP/breakPointSummary.txt",header=T)
+install.packages("tidyverse")
+library(tidyverse)
+breakpoints$width = breakpoints$end - breakpoints$start
+ggplot(breakpoints)+geom_density(aes(width))+scale_x_log10()
+

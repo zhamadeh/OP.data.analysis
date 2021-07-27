@@ -1,0 +1,11 @@
+## Removing centromeres and hotspots
+
+library(tidyverse)
+#Convert ID to factor to iterate through levels of file
+breakpoints$ID <- as.factor(breakpoints$ID)
+
+
+for (level in levels(breakpoints$ID)){
+  level=levels(breakpoints$ID)[1]
+  tmp <- filter(breakpoints,ID==level)
+}
