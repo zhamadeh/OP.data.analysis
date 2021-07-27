@@ -31,7 +31,7 @@ frequencyFilterBreakpoints <- function(summaryBreaks.df, blacklist="Input/00.cen
   
   #breaks$filenames <- tools::file_path_sans_ext(breaks$filenames)
   breaks$library <- as.factor(breaks$library)
-  levels(breaks$library) <- droplevels(breaks$library)
+  #levels(breaks$library) <- droplevels(breaks$library)
   
   counter=0
   for (f in levels(breaks$library)){
@@ -49,12 +49,14 @@ frequencyFilterBreakpoints <- function(summaryBreaks.df, blacklist="Input/00.cen
     tmp$breaks@seqinfo <- seqinfo
     levels(tmp$breaks@seqnames) <- seqnameLevels
     
-    tmp$confint
-    tmp$confint<-GRanges(filter(breaks,library==tmp$ID) %>% select(c(seqnames,CI.start,CI.end,width,strand,genoT,deltaW)))
+    
+    tmp$confint = tmp$confint[queryHits(findOverlaps(tmp$confint, tmp$breaks, type="any")),]
+    #$confint<-GRanges(filter(breaks,library==tmp$ID) %>% select(c(seqnames,CI.start,CI.end,width,strand,genoT,deltaW)))
     tmp$confint@seqinfo <- seqinfo
     levels(tmp$confint@seqnames) <- seqnameLevels
     
-    save(tmp, file=paste0(cleanDatapath,"/",basename(file)))
+    save(tmp, file=paste0("Output/bpr/data.blacklisted/",basename(file),"_bl.RData"))
   }
+  
   
 }
