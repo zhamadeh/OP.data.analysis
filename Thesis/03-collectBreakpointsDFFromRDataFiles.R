@@ -23,6 +23,3 @@ collectBreaksAllFiles <- function(datapath="../StraVa/DATA/rdata/"){
   return(breaks.all.files)
 }
 
-breakpoints <- collectBreaksAllFiles()
-
-write.table(breakpoints,"Input/03.library.breakpoints.txt",col.names = T,row.names = F,quote = F,sep = "\t")

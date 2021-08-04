@@ -339,5 +339,5 @@ collectLibraryStats <- function(folder){
 	write.table(met,"Input/01.library.metrics.txt",sep="\t",quote=F,row.names = F,col.names = T)
 }
 
-collectLibraryStats(args[1])
-collectLibraryStats("../../Data/BAM/All_good_libraries/ALL_GOOD_BAM_FILES/")
+#collectLibraryStats(args[1])
+#collectLibraryStats("../../Data/BAM/All_good_libraries/ALL_GOOD_BAM_FILES/")

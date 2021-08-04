@@ -1,49 +1,43 @@
+#######################################################
+####                  Master Script                 ###
+#######################################################
+
+
+#Packages
 install.packages("BiocManager")
 BiocManager::install("breakpointR")
 library(breakpointR)
-source("R/readCountPlotting.R")
-source("R/collectLibraryMetrics.R")
-source("R/plottingPairs.R")
+for (file in list.files("Thesis/",full.names = T)){
+  source(file)
+}
 
-args = commandArgs(trailingOnly=TRUE)
+#### Running individual functions from each script ####
 
-### Collect library metrics from BAM files ### 
+# Part 1
+collectLibraryStats("../../Data/BAM/All_good_libraries/ALL_GOOD_BAM_FILES/")
 
-collectLibraryStats(folder = args[1])
+# Part 2
+runBreakpointR("../../Data/BAM/All_good_libraries/ALL_GOOD_BAM_FILES/")
 
-### Run breakpointR and generate rdata files ###
+# Part 3
+breakpoints <- collectBreaksAllFiles()
+write.table(breakpoints,"Input/03.library.breakpoints.txt",col.names = T,row.names = F,quote = F,sep = "\t")
 
-breakpointr(inputfolder=args[1], outputfolder="Output/bpr/", pairedEndReads=TRUE, numCPU=2,windowsize=175,binMethod="reads",peakTh=0.3875,min.mapq=7.75,trim=6.5,background=0.15)
-
-### Quality metrics assembly
-
+# Part 4
 qualityMetrics()
 
-### Plot pairs
-
+# Part 5
 plottingPairs()
 
-### Run breakpointR and generate rdata files ###
+# Part 6
+qualityFilterLibraries()
 
-readPlotting(rdata="Output/bpr/data/",plot.dir = "Output/bpr/plots/",cluster.metrics="merge.metrics.background.quality.txt",features=c("coverage","background","spikiness","evenness.mean","good"),numOfLibs=10)
+# Part 7
+frequencyFilterBreakpoints(blacklist="Input/00.centromeres2.txt")
+
+# Part 8
+rePlottingBPR()
+
+# Part 9 will change everytime depending on data
 
 
-
-
-### PCA analysis ### 
-
-merge <- read.table("merge.quality.metrics.complete.txt",header=T)
-merge.pca =  prcomp(merge[,c(3:7)],center = T,scale. = T)
-
-fviz_pca_ind(merge.pca, geom.ind = "point", pointshape = 21, 
-             pointsize = 2, 
-             fill.ind = merge$quality, 
-             col.ind = "black", 
-             palette = c("#b1c926", "#32a852", "#c98d26","red","#0acca5"), 
-             addEllipses = TRUE,
-             label = "var",
-             col.var = "black",
-             repel = TRUE,
-             legend.title = "Library Quality")+
-  theme(text = element_text(size=18)) +
-  save("Output/pca.png")

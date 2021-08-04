@@ -4,4 +4,6 @@
 
 ### Run breakpointR and generate rdata files ###
 
-breakpointr(inputfolder=args[1], outputfolder="Output/bpr/", pairedEndReads=TRUE, numCPU=2,windowsize=175,binMethod="reads",peakTh=0.3875,min.mapq=7.75,trim=6.5,background=0.15)
+runBreakpointR <- function(dir){
+  breakpointr(inputfolder=dir, outputfolder="Output/bpr/", pairedEndReads=TRUE, numCPU=2,windowsize=175,binMethod="reads",peakTh=0.3875,min.mapq=7.75,trim=6.5,background=0.15)
+}

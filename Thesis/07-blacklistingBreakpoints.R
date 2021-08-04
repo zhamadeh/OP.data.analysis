@@ -2,7 +2,7 @@
 ####         Workflow Part 7: Blacklisting          ###
 #######################################################
 
-frequencyFilterBreakpoints <- function(summaryBreaks.df, blacklist="Input/00.centromeres2.txt"){
+frequencyFilterBreakpoints <- function(blacklist="Input/00.centromeres2.txt"){
   
   summaryBreaks<-read.table("Input/05.breakpoints.metrics.quality.gene.txt",header = T)
   summaryBreaks.df<- GRanges(summaryBreaks)

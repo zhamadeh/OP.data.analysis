@@ -2,7 +2,7 @@
 ####     Workflow Part 6: Complete Dataset          ###
 #######################################################
 
-qualityFilterLibraries <- function(datapath,metricsfileDir,filteredDatapath){
+qualityFilterLibraries <- function(){
 
 	metrics <- read.table("Input/02.library.quality.txt",header  =T) 
 	metrics$file <- as.factor(metrics$file)
