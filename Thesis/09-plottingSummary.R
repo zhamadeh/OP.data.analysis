@@ -3,7 +3,7 @@
 #######################################################
 library(tidyverse)
 library(plyr)
-
+library(ggpubr)
 
 
 
@@ -51,10 +51,10 @@ lengths <- read.table("Output/SummaryTables/chrLengths.txt",header=T)
 byChr<- read.table("Output/SummaryTables/perChrom.txt",header=T)
 
 for (i in c("BLM","BLM.RECQL5","RECQL5","WT","ALL")){
-  print(byChr[,i])
+  #print(byChr[,i])
   for (j in 1:nrow(numOfLibsPerGene)){
     if (numOfLibsPerGene[j,1]==i){
-      print(numOfLibsPerGene[j,2])
+      #print(numOfLibsPerGene[j,2])
       byChr[,i] = byChr[,i]/ numOfLibsPerGene[j,2]
     }
   }
@@ -64,14 +64,15 @@ scePerChrPerGeneVsLength <- merge(lengths,byChr,by.x="Chromosome",by.y="seqnames
 tidy <- gather(scePerChrPerGeneVsLength, gene,sce_per_chr,BLM:ALL)
 all <- filter(tidy,gene=="ALL")
 tidy <- filter(tidy,gene!="ALL")
+tidy$Length<- tidy$Length/1e+6
 
-ggplot(tidy) + geom_point(aes(Length,sce_per_chr,group=gene,color=gene), na.rm=TRUE)+
-                   geom_smooth(aes(Length,sce_per_chr,group=gene,color=gene),se=F,method="lm", na.rm=TRUE,size=2)+
+ggplot(tidy) +  geom_smooth(aes(Length,sce_per_chr,group=gene,color=gene),se=F,method="lm", na.rm=TRUE,size=2)+
                    theme_classic(base_size = 25) +
                    ylab("SCEs/CHR/LIB")+
                    xlab("CHR LENGTH")+
   theme(legend.position = c(0.25, 0.8),legend.title = element_blank())+
-  scale_colour_grey()
+  scale_colour_grey()+
+  geom_point(aes(Length,sce_per_chr,group=gene),color="blue", na.rm=TRUE)
 
 tidy$Length<-as.numeric(tidy$Length)
 tidy$gene<-as.factor(tidy$gene)
@@ -113,16 +114,17 @@ summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,
 }
 
 tgc=summarySE(tidy, measurevar="sce_per_chr", groupvars=c("Length"))
-tgc$Length=as.integer(tgc$Length)
+tgc$Length=as.numeric(tgc$Length)
 
 ggplot(tgc, aes(x=Length, y=sce_per_chr)) + 
-  geom_errorbar(aes(ymin=sce_per_chr-se, ymax=sce_per_chr+se,width=5),size=1,color="grey") +
+  geom_errorbar(aes(ymin=sce_per_chr-se, ymax=sce_per_chr+se),width=10,size=1,color="grey") +
   geom_smooth(method="lm",se=F,size=3,color="black") +
   #geom_crossbar(aes(ymin=sce_per_chr-se, ymax=sce_per_chr+se))+
   theme_classic(base_size = 25) +
-  ylab("SCE Frequency")+
+  ylab("SCEs / Chromosome")+
   xlab("Chromosome Length")+
-  geom_point(size=3,color="blue")
+  geom_point(size=4,color="#4075a8")+
+  stat_cor(method = "pearson",p.accuracy = 0.001,size=7)
 
 ggsave("Output/Plots/scePerChrPerGeneVsLength.png")
 
@@ -168,17 +170,19 @@ test<-dplyr::rename(test,c("sces"="n()"))
 
 ggplot(test) + geom_jitter(aes(gene,sces, color=gene))+ geom_boxplot(aes(gene,sces),width=0.1,coef = 5) +
   theme_classic()+
-  theme(text=element_text(size=15)) +
-  ggsave("Output/Plots/SCEperGene.png")
+  theme(text=element_text(size=15),legend.position = "none")
+
+ggsave("Output/Plots/SCEperGene.png")
 
 
-#my_comparisons <- list( c("WT", "RECQL5"), c("WT", "BLM/RECQL5"), c("WT", "BLM") )
-#ggboxplot(test, x = "gene", y = "sces",
-#		  color = "black",  add = "jitter",width=0.25, add.params = list(color = "gene"),
-#		  xlab="Gene",ylab="SCEs/library") +
-#	stat_compare_means(comparisons = my_comparisons,label.y = c(31, 34, 37)) +
-#	stat_compare_means(label = "p.signif", method = "t.test",
-#					   ref.group = "WT")
+my_comparisons <- list( c("WT", "RECQL5"), c("WT", "BLM/RECQL5"), c("WT", "BLM") )
+ggboxplot(test, x = "gene", y = "sces",
+          fill="#4075a8",  add = "jitter",width=0.1, add.params = list(color = "gene"),
+		  xlab="Gene",ylab="SCEs/library") +
+	stat_compare_means(comparisons = my_comparisons,label.y = c(31, 34, 37)) +
+	stat_compare_means(label = "p.signif", method = "t.test",
+				   ref.group = "WT")+
+  scale_colour_grey()
 
 
 
@@ -216,6 +220,6 @@ suppressMessages(suppressWarnings(ggplot(breakpointSummary) + stat_ecdf(aes(widt
                                     theme(text = element_text(size=15))+
                                     geom_density(aes(width),size=1.1)+
                                     geom_vline(xintercept=median(breakpointSummary$width), linetype="dashed", color = "red") +
-                                    geom_text(aes(x=5000, label=paste0("Median\n",median(width)," bp"), y=0.8))  +
-                                    ggsave("Output/Plots/breakpointResolution.png")))
+                                    geom_text(aes(x=5000, label=paste0("Median\n",median(width)," bp"), y=0.8))))
+                                    ggsave("Output/Plots/breakpointResolution.png")
                                     
