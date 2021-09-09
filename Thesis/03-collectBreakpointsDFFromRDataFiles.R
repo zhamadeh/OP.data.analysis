@@ -12,11 +12,12 @@ collectBreaksAllFiles <- function(datapath="../StraVa/DATA/rdata/"){
   for (file in files) {
     message("Reading ... " , basename(file), " ... ",round(  (n/length(files))*100  ,  digits = 1  ) , "%"  )
     n=n+1
-    data <- get(load(file))[c('breaks', 'confint','ID')]
-    data$breaks$ID <- data$ID
+    data <- get(load(file))[c('breaks','ID')]
     breakpoints <- as.data.frame(data$breaks)
+    
 
-    if (length(breakpoints)) {
+    if (nrow(breakpoints)) {
+      breakpoints$library = data$ID
       breaks.all.files <- rbind(breakpoints,breaks.all.files)
     }  
   }
