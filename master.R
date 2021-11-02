@@ -39,5 +39,5 @@ frequencyFilterBreakpoints(blacklist="Input/00.centromeres2.txt")
 rePlottingBPR()
 
 # Part 9 will change everytime depending on data
-
+sces <- read.table("Input/06.sisterChromatidExchanges.txt",header=T)
 
