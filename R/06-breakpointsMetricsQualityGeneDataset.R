@@ -4,18 +4,19 @@
 
 qualityFilterLibraries <- function(){
 
-	metrics <- read.table("Input/02.library.quality.txt",header  =T) 
-	metrics$file <- as.factor(metrics$file)
+	metrics <- read.table("INPUT/2021/04.library.quality_2021.txt",header  =T) 
+	metrics$Library <- as.factor(metrics$Library)
+	#metrics%>% group_by(quality)%>% summarize(n())
 	
-	breakpoints<- read.table("Input/03.library.breakpoints.txt",header=T)
-  breakpoints$ID<-as.factor(breakpoints$ID)
+	breakpoints<- read.table("INPUT/2021/03.library.breakpoints.txt",header=T)
+  breakpoints$library<-as.factor(breakpoints$Library)
   
-  breakpoints_full = merge(breakpoints,metrics,by.y="file",by.x="ID")
+  breakpoints_full = merge(breakpoints,metrics,by="Library")
   
-  write.table(breakpoints_full,"Input/04.breakpoints.metrics.quality.txt",quote = F,col.names = T,row.names = F,sep = "\t")
+  #write.table(breakpoints_full,"INPUT/05.breakpoints.complete.txt",quote = F,col.names = T,row.names = F,sep = "\t")
   
-  breakpoints_full$library <- breakpoints_full$ID
-	suppressWarnings(breakpoints_full <- breakpoints_full %>% separate(ID, c("a","b","c","d","e","f"), "[_-]+"))
+  #breakpoints_full$library <- breakpoints_full$Library
+	suppressWarnings(breakpoints_full <- breakpoints_full %>% separate(library, c("a","b","c","d","e","f"), "[_-]+"))
 	breakpoints_full$gene <- "gene"
 	for (row in 1:nrow(breakpoints_full)){
 
@@ -36,12 +37,18 @@ qualityFilterLibraries <- function(){
 						breakpoints_full[row,"gene"]="RECQL5"
 					}
 				}
+			  else if (breakpoints_full[row,letter]=="RECQL1"| breakpoints_full[row,letter]=="recql1"){
+			    breakpoints_full[row,"gene"]="RECQL1"
+			  }
+			  else if (breakpoints_full[row,letter]=="RTEL"| breakpoints_full[row,letter]=="rtel"){
+			    breakpoints_full[row,"gene"]="RTEL1"
+			  }
 			}
 		}
 
 	}
 
 	breakpoints_full <- select(breakpoints_full,-c(a,b,c,d,e,f))
-	write.table(breakpoints_full,"Input/05.breakpoints.metrics.quality.gene.txt",quote = F,col.names = T,row.names = F,sep = "\t")
+	write.table(breakpoints_full,"INPUT/2021/05.breakpoints.metrics.quality.gene_2021.txt",quote = F,col.names = T,row.names = F,sep = "\t")
 
 }

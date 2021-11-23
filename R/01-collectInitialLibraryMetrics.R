@@ -143,9 +143,7 @@ bamToGRanges <- function(bamfile, bamindex=bamfile,chromosomes=NULL,pairedEndRea
 		data <- data[idx]
 		stopTimedMessage(ptm)
 	}
-
 	return(data)
-
 }
 
 fixedWidthBins <- function(bamfile=NULL, assembly=NULL, chrom.lengths=NULL, chromosome.format, binsizes=1e6, stepsizes=NULL, chromosomes=NULL) {
@@ -336,8 +334,8 @@ collectLibraryStats <- function(folder){
 		met=rbind(met,row)
 	}
 	
-	write.table(met,"Input/01.library.metrics.txt",sep="\t",quote=F,row.names = F,col.names = T)
+	write.table(met,"01.library.metrics_2021.txt",sep="\t",quote=F,row.names = F,col.names = T)
 }
 
 #collectLibraryStats(args[1])
-#collectLibraryStats("../../Data/BAM/All_good_libraries/ALL_GOOD_BAM_FILES/")
+collectLibraryStats("../../../projects/lansdorp/zeid_nov18/")

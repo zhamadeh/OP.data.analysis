@@ -9,10 +9,10 @@ library("ggplot2")
 
 plottingPairs <- function(){
   
-  merge=read.table("Input/02.library.quality.txt",header=T)
+  merge=read.table("INPUT/2021/04.library.quality_2021.txt",header=T)
   merge$quality<-as.factor(merge$quality)
   merge$quality
-  my_cols=c("#32a852", "#c98d26","red","#0acca5")
+  my_cols=c("#c98d26","#32a852","red")
   
   panel.cor <- function(x, y){
     usr <- par("usr"); on.exit(par(usr))
@@ -38,11 +38,11 @@ plottingPairs <- function(){
   }
   
   # Create the plots
-  pairs(merge[, c("spikiness","evenness.med","evenness.mean","coverage","background")],
+  pairs(merge[, c("coverage","background","spikiness","Quality","evenness.mean", "Coverage_after_1Gb_sequencing")],
         lower.panel = panel.cor,
         upper.panel = upper.panel,
         diag.panel = panel.hist) +
-    ggsave("Output/pairs.libraryQuality.png")
+    ggsave("2021.pairs.libraryQuality.png")
   
   
 }
