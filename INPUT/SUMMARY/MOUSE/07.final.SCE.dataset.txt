@@ -1,3 +1,4 @@
+Library	start	end	width	strand	genoT	deltaW	Quality	Median_insert_size	Adapters_at_least_50bp	Alignment_rate	Initial_reads_aligned	Postfiltering_reads_aligned	Mean_read_length	Duplication_rate	Coverage_depth	Background	Reads_per_Mb	Percent_WC	Mean_GC	Coverage_after_1Gb_sequencing	gene	Chromosome
 f1216-c38-mesc-a1h5-hkt-f13-r2-c2_S1165_	12061977	12089445	27469	*	wc-cc	91	G	141	2.03323e-05	0.9722	363332	363332	74.084873	0.045699	0.0095138173	0.027933527	66	0.5	0.416089	0.116427	BLM	1
 f1216-c38-mesc-a1h5-hkt-f13-r2-c2_S1165_	20306148	20372946	66799	*	cc-wc	78	G	141	2.03323e-05	0.9722	363332	363332	74.084873	0.045699	0.0095138173	0.027933527	66	0.5	0.416089	0.116427	BLM	1
 f1216-c38-mesc-a1h5-hkt-f13-r2-c2_S1165_	47010725	47098424	87700	*	wc-cc	83	G	141	2.03323e-05	0.9722	363332	363332	74.084873	0.045699	0.0095138173	0.027933527	66	0.5	0.416089	0.116427	BLM	1
