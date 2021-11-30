@@ -1,0 +1,3 @@
+gene	SCE	mean_resolution	median_resolution
+BLM	3532	61942.7904869762	28129
+WT	965	76393.7606217617	29348
